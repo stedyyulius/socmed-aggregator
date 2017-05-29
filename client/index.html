@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <script src="https://code.jquery.com/jquery-3.2.1.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <title>Twatt App</title>
+  </head>
+  <body>
+      <input type="text" id="search" placeholder="type to search">
+      <button id="search-button" type="submit">Search</button>
+    <table border='2px'>
+      <thead>
+        <tr>
+          <td><b>No</b></td>
+          <td><b>User</b></td>
+          <td><b>Tweet</b></td>
+        </tr>
+      </thead>
+      <tbody id="resultSearch"></tbody>
+    </table>
+    <script type="text/javascript">
+      $(document).ready(function(){
+        $('#search-button').click(function(){
+          let inputSearch = $('#search').val()
+          //console.log(inputSearch);
+          axios.post('http://localhost:3000/search',{
+            search: inputSearch
+          })
+          .then(function(response){
+            console.log(response);
+            let result = response
+            let table = $('#resultSearch')
+            table.html('')
+            let i = 1;result.data.forEach(res=>{
+              table.append(`\
+                <tr>\
+                <td class = "No">${i++}</td>\
+                <td class = "searchUser">${res.user.name}</td>\
+                <td class = "searchTweet">${res.text}</td>\
+                <tr>\
+              `)
+            })
+          })
+          .catch(err=>{
+            console.log(err);
+          })
+        })
+      })
+    </script>
+  </body>
+</html>
